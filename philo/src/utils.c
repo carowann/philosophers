@@ -1,34 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/05 18:42:46 by cwannhed         ###   ########.fr       */
+/*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
+/*   Updated: 2025/08/05 15:20:05 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-//ideas for solution
-//data struct w/ priority, whoever ate too long ago, jumps the queue
-//mutual exclusion: no process can access shared data and cause data races
-
-int	main(int argc, char *argv[])
+int	ft_isdigit(int c)
 {
-	// pthread_mutex_t	mutex;
-	t_data			shared;
-
-	shared = (t_data){0};
-	if (!valid_args(argc, argv, &shared))
+	if (c >= '0' && c <= '9')
 		return (1);
-	// pthread_mutex_init(&mutex, NULL);
-	if (!create_philos(&shared))
-		return (1);
-	if (!wait_philos(&shared))
-		return (1);
-	// pthread_mutex_destroy(&mutex);
 	return (0);
+}
+
+long	ft_atol(const char *nptr)
+{
+	long	nbr;
+	int		sign;
+
+	nbr = 0;
+	sign = 1;
+	while (*nptr == ' ' || (*nptr >= 9 && *nptr <= 13))
+		nptr++;
+	if (*nptr == '-' || *nptr == '+')
+	{
+		if (*nptr == '-')
+			sign = -1;
+		nptr++;
+	}
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		nbr = nbr * 10 + (*nptr - '0');
+		nptr++;
+	}
+	return (sign * nbr);
 }
