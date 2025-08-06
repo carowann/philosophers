@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 11:51:44 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 18:42:34 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <limits.h>
 # include <stdlib.h>
 # include <sys/time.h>
+# include <unistd.h>
 
 enum code
 {
@@ -27,23 +28,24 @@ enum code
 
 typedef struct s_philo
 {
-	int			id;
-	pthread_t	thread;
-	long		time_last_meal;
+	int				id;
+	int				meals;
+	pthread_t		thread;
+	long			time_last_meal;
+	struct s_data	*shared;
 }				t_philo;
 
-typedef struct s_shared
+typedef struct s_data
 {
 	int				n_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				n_times_philos_eat;
+	int				stop;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }				t_data;
-
-
 
 //parse.c
 int	valid_args(int argc, char *argv[], t_data *data);
@@ -60,5 +62,10 @@ int		init_forks(t_data *data);
 int		create_philos(t_data *data);
 int		wait_philos(t_data *data);
 int		destroy_forks(t_data *shared);
+void	*monitor_routine(void*arg);
+
+//routine.c
+void	eat(t_philo	*philo);
+void	nap(t_philo *philo);
 
 #endif

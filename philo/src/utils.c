@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 11:50:21 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 12:36:21 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ long	get_curr_time_ms(void)
 	long			curr_time;
 	
 	gettimeofday(&tv, NULL);
+	//TODO:protect
 	curr_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	return (curr_time);
 }

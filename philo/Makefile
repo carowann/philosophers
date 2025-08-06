@@ -6,36 +6,40 @@
 #    By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 14:33:31 by cwannhed          #+#    #+#              #
-#    Updated: 2025/08/05 17:01:29 by cwannhed         ###   ########.fr        #
+#    Updated: 2025/08/06 18:33:56 by cwannhed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philosophers
+NAME = philo
 
-VALGRIND =  valgrind --leak-check=full --track-origins=yes --track-fds=yes --show-leak-kinds=all
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
 
 INCLUDES = -I./includes
 
-SRC =	src/main.c \
-	src/parse.c \
-	src/utils.c \
-	src/thread_mgmt.c
+SRC =	src/main.c		\
+	src/parse.c		\
+	src/utils.c		\
+	src/thread_mgmt.c	\
+	src/routine.c
 
 FLAGS	= -g -pthread
 FLAGS	+= -Wall -Werror -Wextra
+
+all: $(NAME)
 
 $(NAME): $(SRC)
 	@cc $(SRC) $(INCLUDES) $(FLAGS) -o $(NAME)
 	@echo "$(GREEN)[$(NAME)]:\t compilation completed$(RESET)"
 
-all:$(NAME)
 
 clean:
-	@echo "$(RED)[$(NAME)]:\t clean$(RESET)"; \
+	@echo "$(RED)[$(NAME)]:\t clean$(RESET)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@echo "$(RED)[$(NAME)]:\t fclean$(RESET)"; \
+	@echo "$(RED)[$(NAME)]:\t fclean$(RESET)"
 
 re: fclean all
 
