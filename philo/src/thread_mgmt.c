@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 10:13:14 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:18:04 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	init_forks(t_data *data)
 	if (!data->forks)
 		return (0);
 	i = 0;
-	while (i < data->forks)
+	while (i < data->n_philos)
 	{
 		if(pthread_mutex_init(&data->forks[i], NULL) != SUCCESS)
 			return (0);
@@ -67,8 +67,6 @@ int	wait_philos(t_data *shared)
 	i = 0;
 	while (i < shared->n_philos)
 	{
-		shared->philos[i].id = i + 1;
-		// init other shared data
 		if (pthread_join(shared->philos[i].thread, NULL) != SUCCESS)
 		{
 			//TODO: clean up prev threads
