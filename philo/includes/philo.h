@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 10:04:31 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 11:51:44 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <limits.h>
 # include <stdlib.h>
+# include <sys/time.h>
 
 enum code
 {
@@ -28,6 +29,7 @@ typedef struct s_philo
 {
 	int			id;
 	pthread_t	thread;
+	long		time_last_meal;
 }				t_philo;
 
 typedef struct s_shared
@@ -50,10 +52,13 @@ int	valid_format(char *arg);
 //utils.c
 int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
+long	get_curr_time_ms(void);
 
 //thread_mgmt.c
 void	*routine(void *arg);
+int		init_forks(t_data *data);
 int		create_philos(t_data *data);
 int		wait_philos(t_data *data);
+int		destroy_forks(t_data *shared);
 
 #endif
