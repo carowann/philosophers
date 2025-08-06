@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/05 18:41:35 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:04:31 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ typedef struct s_philo
 
 typedef struct s_shared
 {
-	int		n_philos;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		n_times_philos_eat;
-	t_philo	*philos;
+	int				n_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				n_times_philos_eat;
+	pthread_mutex_t	*forks;
+	t_philo			*philos;
 }				t_data;
 
 

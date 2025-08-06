@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/05 18:42:46 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:09:37 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ int	main(int argc, char *argv[])
 	shared = (t_data){0};
 	if (!valid_args(argc, argv, &shared))
 		return (1);
-	// pthread_mutex_init(&mutex, NULL);
+	if (!init_forks(&shared))
+		return (1);
 	if (!create_philos(&shared))
 		return (1);
 	if (!wait_philos(&shared))
 		return (1);
-	// pthread_mutex_destroy(&mutex);
+	if (!destroy_forks(&shared))
+		return (1);
 	return (0);
 }

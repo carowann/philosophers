@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/05 18:43:42 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:13:14 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,22 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	printf("philo id %d \n", philo->id);
 	return (NULL);
+}
+
+int	init_forks(t_data *data)
+{
+	int	i;
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philos);
+	if (!data->forks)
+		return (0);
+	i = 0;
+	while (i < data->forks)
+	{
+		if(pthread_mutex_init(&data->forks[i], NULL) != SUCCESS)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 int	create_philos(t_data *data)
@@ -59,6 +75,20 @@ int	wait_philos(t_data *shared)
 			return (0);
 		}
 		printf("thread %d has finished execution\n", i);
+		i++;
+	}
+	return (1);
+}
+
+int destroy_forks(t_data *shared)
+{
+	int	i;
+	
+	i = 0;
+	while (i < shared->n_philos)
+	{
+		if (pthread_mutex_destroy(&shared->forks[i]))
+			return(0);
 		i++;
 	}
 	return (1);
