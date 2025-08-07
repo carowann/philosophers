@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 18:42:34 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/07 16:16:37 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				n_times_philos_eat;
 	int				stop;
+	long			start_time;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }				t_data;
@@ -54,7 +55,7 @@ int	valid_format(char *arg);
 //utils.c
 int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
-long	get_curr_time_ms(void);
+long	get_timestamp(t_data *shared);
 
 //thread_mgmt.c
 void	*routine(void *arg);

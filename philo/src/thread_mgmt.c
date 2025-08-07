@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 18:42:34 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/07 16:25:10 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*routine(void *arg)
 		if (philo->shared->n_times_philos_eat != -1 && philo->meals >= philo->shared->n_times_philos_eat)
 			break;
 		//TODO: mutex printf
-		printf("%ld %d is thinking\n", get_curr_time_ms(), philo->id);
+		printf("%ld %d is thinking\n", get_timestamp(philo->shared), philo->id);
 		if (!philo->shared->stop)
 			eat(philo);
 		if (!philo->shared->stop)
@@ -50,18 +50,17 @@ int	init_forks(t_data *data)
 int	create_philos(t_data *data)
 {
 	int		i;
-	long	start_time;
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philos);
 	if (!data->philos)
 		return (0);
-	start_time = get_curr_time_ms();
+	data->start_time = get_timestamp(data);
 	data->stop = 0;
 	i = 0;
 	while (i < data->n_philos)
 	{
 		data->philos[i].id = i + 1;
-		data->philos[i].time_last_meal = start_time;
+		data->philos[i].time_last_meal = data->start_time;
 		data->philos[i].shared = data;
 		data->philos[i].meals = 0;
 		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]) != SUCCESS)
@@ -117,10 +116,10 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < shared->n_philos)
 		{
-			time_starving = get_curr_time_ms() - shared->philos[i].time_last_meal;
+			time_starving = get_timestamp(shared) - shared->philos[i].time_last_meal;
 			if (time_starving >= shared->time_to_die)
 			{
-				printf("%ld %d died\n", get_curr_time_ms(), shared->philos[i].id);
+				printf("%ld %d died\n", get_timestamp(shared), shared->philos[i].id);
 				shared->stop = 1;
 				return (NULL);
 			}

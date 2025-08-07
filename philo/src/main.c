@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 18:43:02 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/07 15:28:42 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 int	main(int argc, char *argv[])
 {
-	t_data			shared;
-	pthread_t		monitor;
+	t_data		shared;
+	pthread_t	monitor;
 
 	shared = (t_data){0};
 	if (!valid_args(argc, argv, &shared))

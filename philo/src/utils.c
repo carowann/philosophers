@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/06 12:36:21 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/08/07 16:15:35 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ long	ft_atol(const char *nptr)
 	return (sign * nbr);
 }
 
-long	get_curr_time_ms(void)
+long	get_timestamp(t_data *shared)
 {
 	struct timeval	tv;
-	long			curr_time;
+	long			timestamp;
 	
 	gettimeofday(&tv, NULL);
 	//TODO:protect
-	curr_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	return (curr_time);
+	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - shared->start_time);
+	return (timestamp);
 }
