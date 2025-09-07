@@ -1,0 +1,24 @@
+# Compiled object files
+*.o
+
+# Executable files
+philo
+
+# Debug files
+*.dSYM/
+*.out
+*.log
+
+# Editor/IDE files
+*.swp
+*.swo
+*.bak
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build directories
+/build/
+bin/

@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/09/07 18:33:57 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:47:17 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <string.h>
 
 enum code
 {
@@ -39,6 +40,7 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				n_philos;
+	int				threads_created;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
