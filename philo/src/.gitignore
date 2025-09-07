@@ -1,0 +1,37 @@
+# Compiled source files
+*.o
+*.out
+*.obj
+*.exe
+
+# Editor files
+*~
+*.swp
+*.swo
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build directories
+/build/
+/bin/
+/dist/
+
+# Dependency directories
+/node_modules/
+/vendor/
+
+# Logs
+*.log
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+# Others
+*.dSYM/
+*.idea/
+*.vscode/

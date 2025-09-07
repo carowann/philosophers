@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/07 16:15:35 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:29:50 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,15 @@ long	get_timestamp(t_data *shared)
 	//TODO:protect
 	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - shared->start_time);
 	return (timestamp);
+}
+
+// Funzione helper per i print thread-safe
+void print_status(t_philo *philo, char *status)
+{
+	pthread_mutex_lock(&philo->shared->print_mutex);
+	if (!philo->shared->stop)
+	{
+		printf("%ld %d %s\n", get_timestamp(philo->shared), philo->id, status);
+	}
+	pthread_mutex_unlock(&philo->shared->print_mutex);
 }

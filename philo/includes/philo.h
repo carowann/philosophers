@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/07 16:16:37 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/09/07 18:33:57 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 	int				id;
 	int				meals;
 	pthread_t		thread;
+	pthread_mutex_t	meal_mutex;
 	long			time_last_meal;
 	struct s_data	*shared;
 }				t_philo;
@@ -45,6 +46,7 @@ typedef struct s_data
 	int				stop;
 	long			start_time;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	print_mutex;
 	t_philo			*philos;
 }				t_data;
 
@@ -56,6 +58,7 @@ int	valid_format(char *arg);
 int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
 long	get_timestamp(t_data *shared);
+void	print_status(t_philo *philo, char *status);
 
 //thread_mgmt.c
 void	*routine(void *arg);
