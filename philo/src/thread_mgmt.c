@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_mgmt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/07 16:25:10 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/09/07 19:50:07 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,17 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
+int init_mutexes(t_data *data)
+{
+	if (pthread_mutex_init(&data->print_mutex, NULL) != SUCCESS)
+		return (0);
+	if (pthread_mutex_init(&data->philos->meal_mutex, NULL) != SUCCESS)
+		return (0);
+	if (init_forks(data) != SUCCESS)
+		return (0);
+	return (1);
+}
+
 int	init_forks(t_data *data)
 {
 	int	i;
@@ -47,15 +58,16 @@ int	init_forks(t_data *data)
 	return (1);
 }
 
-int	create_philos(t_data *data)
+int create_philos(t_data *data)
 {
-	int		i;
+	int i;
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philos);
 	if (!data->philos)
 		return (0);
 	data->start_time = get_timestamp(data);
 	data->stop = 0;
+	data->threads_created = 0;
 	i = 0;
 	while (i < data->n_philos)
 	{
@@ -63,30 +75,43 @@ int	create_philos(t_data *data)
 		data->philos[i].time_last_meal = data->start_time;
 		data->philos[i].shared = data;
 		data->philos[i].meals = 0;
-		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]) != SUCCESS)
+		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]) != 0)
 		{
-			//TODO: clean up prev threads
+			data->stop = 1;
+			while (data->threads_created > 0)
+			{
+				data->threads_created--;
+				pthread_join(data->philos[data->threads_created].thread, NULL);
+			}
 			return (0);
 		}
+		data->threads_created++;
 		i++;
 	}
 	return (1);
 }
 
-int	wait_philos(t_data *shared)
+int wait_philos(t_data *shared)
 {
-	int	i;
-		
+	int i;
+
 	i = 0;
-	while (i < shared->n_philos)
+	while (i < shared->threads_created)
 	{
-		if (pthread_join(shared->philos[i].thread, NULL) != SUCCESS)
-		{
-			//TODO: clean up prev threadskj
-			return (0);
-		}
+		pthread_join(shared->philos[i].thread, NULL);
 		i++;
 	}
+	return (1);
+}
+
+int destroy_mutexes(t_data *shared)
+{
+	if (pthread_mutex_destroy(&shared->print_mutex))
+		return (0);
+	if (pthread_mutex_destroy(&shared->philos->meal_mutex))
+		return (0);
+	if (destroy_forks(shared) != SUCCESS)
+		return (0);
 	return (1);
 }
 
@@ -129,3 +154,22 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
+
+// void cleanup_all(t_data *shared)
+// {
+// 	shared->stop = 1;
+// 	if (shared->threads_created > 0)
+// 		cleanup_created_threads(shared);
+// 	if (shared->forks)
+// 		destroy_forks(shared);
+// 	if (shared->philos)
+// 	{
+// 		free(shared->philos);
+// 		shared->philos = NULL;
+// 	}
+// 	if (shared->forks)
+// 	{
+// 		free(shared->forks);
+// 		shared->forks = NULL;
+// 	}
+// }
