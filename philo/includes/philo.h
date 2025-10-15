@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/09/07 19:47:17 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:43:09 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ typedef struct s_data
 	t_philo			*philos;
 }				t_data;
 
+//cleanup.c
+void	cleanup_and_exit(t_data *data, int exit_code);
+
 //parse.c
-int	valid_args(int argc, char *argv[], t_data *data);
-int	valid_format(char *arg);
+void	validate_args(int argc, char *argv[], t_data *data);
 
 //utils.c
 int		ft_isdigit(int c);
@@ -64,8 +66,8 @@ void	print_status(t_philo *philo, char *status);
 
 //thread_mgmt.c
 void	*routine(void *arg);
-int		init_forks(t_data *data);
-int		create_philos(t_data *data);
+void	init_forks(t_data *data);
+void	create_philos(t_data *data);
 int		wait_philos(t_data *data);
 int		destroy_forks(t_data *shared);
 void	*monitor_routine(void*arg);

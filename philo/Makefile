@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+         #
+#    By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 14:33:31 by cwannhed          #+#    #+#              #
-#    Updated: 2025/08/06 18:33:56 by cwannhed         ###   ########.fr        #
+#    Updated: 2025/10/15 12:32:01 by cwannhed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ SRC =	src/main.c		\
 	src/parse.c		\
 	src/utils.c		\
 	src/thread_mgmt.c	\
-	src/routine.c
+	src/routine.c		\
+	src/cleanup.c
 
 FLAGS	= -g -pthread
 FLAGS	+= -Wall -Werror -Wextra

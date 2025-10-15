@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/09/07 19:50:07 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:48:08 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)arg;
 	while (!philo->shared->stop) //death or enough meals if specified
 	{
@@ -47,24 +47,24 @@ int	init_forks(t_data *data)
 	int	i;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philos);
 	if (!data->forks)
-		return (0);
+		exit(EXIT_FAILURE);
 	i = 0;
 	while (i < data->n_philos)
 	{
 		if(pthread_mutex_init(&data->forks[i], NULL) != SUCCESS)
-			return (0);
+			exit(EXIT_FAILURE);
 		i++;
 	}
-	return (1);
+	return ;
 }
 
-int create_philos(t_data *data)
+void	create_philos(t_data *data)
 {
 	int i;
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philos);
 	if (!data->philos)
-		return (0);
+		exit(EXIT_FAILURE);
 	data->start_time = get_timestamp(data);
 	data->stop = 0;
 	data->threads_created = 0;
@@ -76,19 +76,10 @@ int create_philos(t_data *data)
 		data->philos[i].shared = data;
 		data->philos[i].meals = 0;
 		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]) != 0)
-		{
-			data->stop = 1;
-			while (data->threads_created > 0)
-			{
-				data->threads_created--;
-				pthread_join(data->philos[data->threads_created].thread, NULL);
-			}
-			return (0);
-		}
+			cleanup_and_exit(data, EXIT_FAILURE);
 		data->threads_created++;
 		i++;
 	}
-	return (1);
 }
 
 int wait_philos(t_data *shared)
@@ -118,7 +109,7 @@ int destroy_mutexes(t_data *shared)
 int destroy_forks(t_data *shared)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < shared->n_philos)
 	{
@@ -154,22 +145,3 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
-
-// void cleanup_all(t_data *shared)
-// {
-// 	shared->stop = 1;
-// 	if (shared->threads_created > 0)
-// 		cleanup_created_threads(shared);
-// 	if (shared->forks)
-// 		destroy_forks(shared);
-// 	if (shared->philos)
-// 	{
-// 		free(shared->philos);
-// 		shared->philos = NULL;
-// 	}
-// 	if (shared->forks)
-// 	{
-// 		free(shared->forks);
-// 		shared->forks = NULL;
-// 	}
-// }

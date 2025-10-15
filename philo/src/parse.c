@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwannhed <cwannhed@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:13:14 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/08/12 13:18:41 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/15 12:26:59 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	valid_format(char *arg)
+void	validate_format(char *arg)
 {
 	int	i;
 
@@ -20,31 +20,30 @@ int	valid_format(char *arg)
 	if (arg[i] == '+' || arg[i] == '-')
 		i = 1;
 	if (!arg[i])
-		return (0);
+		exit(EXIT_FAILURE);
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
-			return(0);
+			exit(EXIT_FAILURE);
 		i++;
 	}
-	return (1);
+	return ;
 }
 
-int	valid_args(int argc, char *argv[], t_data *data)
+void	validate_args(int argc, char *argv[], t_data *data)
 {
 	long	values[5];
 	int		i;
 
 	i = 1;
 	if (argc != 5 && argc != 6)
-		return (0);
+		exit(EXIT_FAILURE);
 	while (i < argc)
 	{
-		if (!valid_format(argv[i]))
-			return (0);
+		validate_format(argv[i]);
 		values[i - 1] = ft_atol(argv[i]);
 		if (values[i - 1] <= 0 || values[i - 1] > INT_MAX)
-			return (0);
+			exit(EXIT_FAILURE);
 		i++;
 	}
 	data->n_philos = (int)values[0];
@@ -55,5 +54,5 @@ int	valid_args(int argc, char *argv[], t_data *data)
 		data->n_times_philos_eat = (int)values[4];
 	else
 		data->n_times_philos_eat = -1;
-	return (1);
+	return ;
 }

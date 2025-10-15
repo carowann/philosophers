@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/15 12:40:01 by cwannhed         ###   ########.fr       */
+/*   Created: 2025/10/15 12:31:26 by cwannhed          #+#    #+#             */
+/*   Updated: 2025/10/15 12:36:13 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	main(int argc, char *argv[])
+void	cleanup_and_exit(t_data *data, int exit_code)
 {
-	t_data		shared;
-	pthread_t	monitor;
-
-	memset(&shared, 0, sizeof(t_data));
-	validate_args(argc, argv, &shared);
-	init_forks(&shared);
-	create_philos(&shared);
-	if (pthread_create(&monitor, NULL, monitor_routine, &shared) != 0)
-	{
-		wait_philos(&shared);
-		cleanup_and_exit(&shared, EXIT_FAILURE);
-	}
-	wait_philos(&shared);
-	pthread_join(monitor, NULL);
-	cleanup_and_exit(&shared, EXIT_SUCCESS);
+	wait_philos(data);
+	destroy_forks(data);
+	free(data->forks);
+	free(data->philos);
+	exit(exit_code);
 }
