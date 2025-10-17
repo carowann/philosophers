@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/15 12:48:08 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/17 16:41:16 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,18 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-int init_mutexes(t_data *data)
-{
-	if (pthread_mutex_init(&data->print_mutex, NULL) != SUCCESS)
-		return (0);
-	if (pthread_mutex_init(&data->philos->meal_mutex, NULL) != SUCCESS)
-		return (0);
-	if (init_forks(data) != SUCCESS)
-		return (0);
-	return (1);
-}
+// int init_mutexes(t_data *data)
+// {
+// 	if (pthread_mutex_init(&data->print_mutex, NULL) != SUCCESS)
+// 		return (0);
+// 	if (pthread_mutex_init(&data->philos->meal_mutex, NULL) != SUCCESS)
+// 		return (0);
+// 	if (init_forks(data) != SUCCESS)
+// 		return (0);
+// 	return (1);
+// }
 
-int	init_forks(t_data *data)
+void	init_forks(t_data *data)
 {
 	int	i;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philos);
@@ -58,9 +58,9 @@ int	init_forks(t_data *data)
 	return ;
 }
 
-void	create_philos(t_data *data)
+void	create_philos_and_monitor(t_data *data, pthread_t *monitor)
 {
-	int i;
+	int	i;
 
 	data->philos = malloc(sizeof(t_philo) * data->n_philos);
 	if (!data->philos)
@@ -80,11 +80,18 @@ void	create_philos(t_data *data)
 		data->threads_created++;
 		i++;
 	}
+	(void)monitor;
+	//TODO: check monitor routine creation
+	// if (pthread_create(monitor, NULL, monitor_routine, data) != 0)
+	// {
+	// 	wait_philos(data);
+	// 	cleanup_and_exit(data, EXIT_FAILURE);
+	// }
 }
 
-int wait_philos(t_data *shared)
+int	wait_philos(t_data *shared)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < shared->threads_created)
@@ -95,7 +102,7 @@ int wait_philos(t_data *shared)
 	return (1);
 }
 
-int destroy_mutexes(t_data *shared)
+int	destroy_mutexes(t_data *shared)
 {
 	if (pthread_mutex_destroy(&shared->print_mutex))
 		return (0);
@@ -106,7 +113,7 @@ int destroy_mutexes(t_data *shared)
 	return (1);
 }
 
-int destroy_forks(t_data *shared)
+int	destroy_forks(t_data *shared)
 {
 	int	i;
 

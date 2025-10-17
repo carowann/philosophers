@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/15 12:43:09 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/17 16:28:54 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	print_status(t_philo *philo, char *status);
 //thread_mgmt.c
 void	*routine(void *arg);
 void	init_forks(t_data *data);
-void	create_philos(t_data *data);
+void	create_philos_and_monitor(t_data *data, pthread_t *monitor);
 int		wait_philos(t_data *data);
 int		destroy_forks(t_data *shared);
 void	*monitor_routine(void*arg);

@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/15 12:40:01 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/17 16:26:39 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,7 @@ int	main(int argc, char *argv[])
 	memset(&shared, 0, sizeof(t_data));
 	validate_args(argc, argv, &shared);
 	init_forks(&shared);
-	create_philos(&shared);
-	if (pthread_create(&monitor, NULL, monitor_routine, &shared) != 0)
-	{
-		wait_philos(&shared);
-		cleanup_and_exit(&shared, EXIT_FAILURE);
-	}
+	create_philos_and_monitor(&shared, &monitor);
 	wait_philos(&shared);
 	pthread_join(monitor, NULL);
 	cleanup_and_exit(&shared, EXIT_SUCCESS);
