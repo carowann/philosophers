@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/17 16:41:16 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/22 14:40:50 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,42 +51,64 @@ void	init_forks(t_data *data)
 	i = 0;
 	while (i < data->n_philos)
 	{
-		if(pthread_mutex_init(&data->forks[i], NULL) != SUCCESS)
-			exit(EXIT_FAILURE);
+		if (pthread_mutex_init(&data->forks[i], NULL) != SUCCESS)
+			cleanup_and_exit(data, EXIT_FAILURE);
 		i++;
 	}
 	return ;
+}
+
+void	init_philo(t_philo **philo, int i, t_data *data)
+{
+	(*philo)->id = i + 1;
+	(*philo)->time_last_meal = data->start_time;
+	(*philo)->shared = data;
+	(*philo)->meals = 0;
+	return ;
+}
+
+void	init_data(t_data **data)
+{
+	(*data)->philos = malloc(sizeof(t_philo) * (*data)->n_philos);
+	if (!(*data)->philos)
+		exit(EXIT_FAILURE);
+	(*data)->start_time = get_timestamp((*data));
+	(*data)->stop = 0;
+	(*data)->threads_created = 0;
+}
+
+void	lonely_philo(t_data *data, t_philo *philo)
+{
+	init_philo(&philo, 0, data);
+	pthread_mutex_lock(&philo->shared->forks[0]);
+	print_status(philo, "has taken a fork");
+	usleep(philo->shared->time_to_die * 1000);
+	pthread_mutex_unlock(&philo->shared->forks[0]);
+	print_status(philo, "has died");
+	cleanup_and_exit(data, EXIT_SUCCESS);
 }
 
 void	create_philos_and_monitor(t_data *data, pthread_t *monitor)
 {
 	int	i;
 
-	data->philos = malloc(sizeof(t_philo) * data->n_philos);
-	if (!data->philos)
-		exit(EXIT_FAILURE);
-	data->start_time = get_timestamp(data);
-	data->stop = 0;
-	data->threads_created = 0;
+	init_data(&data);
 	i = 0;
+	if (data->n_philos == 1)
+		lonely_philo(data, &data->philos[0]);
 	while (i < data->n_philos)
 	{
-		data->philos[i].id = i + 1;
-		data->philos[i].time_last_meal = data->start_time;
-		data->philos[i].shared = data;
-		data->philos[i].meals = 0;
+		init_philo(&data->philos[i], i, data);
 		if (pthread_create(&data->philos[i].thread, NULL, routine, &data->philos[i]) != 0)
 			cleanup_and_exit(data, EXIT_FAILURE);
 		data->threads_created++;
 		i++;
 	}
-	(void)monitor;
-	//TODO: check monitor routine creation
-	// if (pthread_create(monitor, NULL, monitor_routine, data) != 0)
-	// {
-	// 	wait_philos(data);
-	// 	cleanup_and_exit(data, EXIT_FAILURE);
-	// }
+	if (pthread_create(monitor, NULL, monitor_routine, data) != 0)
+	{
+		wait_philos(data);
+		cleanup_and_exit(data, EXIT_FAILURE);
+	}
 }
 
 int	wait_philos(t_data *shared)
