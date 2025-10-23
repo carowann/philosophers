@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/17 16:28:54 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/23 12:00:56 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,22 @@ typedef struct s_data
 	t_philo			*philos;
 }				t_data;
 
-//cleanup.c
-void	cleanup_and_exit(t_data *data, int exit_code);
-
-//parse.c
+void	init_data(t_data *data);
+void	check_usage(int argc);
+void	cleanup_and_exit(t_data *data, pthread_t *monitor,int exit_code);
 void	validate_args(int argc, char *argv[], t_data *data);
-
-//utils.c
 int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
 long	get_timestamp(t_data *shared);
 void	print_status(t_philo *philo, char *status);
-
-//thread_mgmt.c
 void	*routine(void *arg);
 void	init_forks(t_data *data);
-void	create_philos_and_monitor(t_data *data, pthread_t *monitor);
-int		wait_philos(t_data *data);
-int		destroy_forks(t_data *shared);
+void	simulation(t_data *data, pthread_t *monitor);
+void	wait_philos(t_data *data);
+void	destroy_forks(t_data *shared);
 void	*monitor_routine(void*arg);
-
-//routine.c
 void	eat(t_philo	*philo);
 void	nap(t_philo *philo);
+void	destroy_all_mutexes(t_data *data);
 
 #endif

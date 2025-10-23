@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:13:14 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/17 15:33:56 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/23 11:11:43 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,7 @@ void	validate_args(int argc, char *argv[], t_data *data)
 	int		i;
 
 	i = 1;
-	if (argc != 5 && argc != 6)
-	{
-		write(2, "Usage: ./philo number_of_philosophers time_to_die", 50);
-		write(2, " time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 72);
-		exit(EXIT_FAILURE);
-	}
+
 	while (i < argc)
 	{
 		validate_format(argv[i]);

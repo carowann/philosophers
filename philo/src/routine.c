@@ -6,11 +6,29 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/22 14:38:32 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/23 11:11:03 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	*routine(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	while (!philo->shared->stop) //death or enough meals if specified
+	{
+		if (philo->shared->n_times_philos_eat != -1 && philo->meals >= philo->shared->n_times_philos_eat)
+			break;
+		print_status(philo, "is thinking");
+		if (!philo->shared->stop)
+			eat(philo);
+		if (!philo->shared->stop)
+			nap(philo);
+	}
+	return (NULL);
+}
 
 void eat(t_philo *philo)
 {

@@ -6,11 +6,21 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/09/07 18:29:50 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/23 11:11:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	check_usage(int argc)
+{
+	if (argc != 5 && argc != 6)
+	{
+		write(2, "Usage: ./philo number_of_philosophers time_to_die", 50);
+		write(2, " time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 72);
+		exit(EXIT_FAILURE);
+	}
+}
 
 int	ft_isdigit(int c)
 {
@@ -46,7 +56,7 @@ long	get_timestamp(t_data *shared)
 {
 	struct timeval	tv;
 	long			timestamp;
-	
+
 	gettimeofday(&tv, NULL);
 	//TODO:protect
 	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - shared->start_time);
@@ -58,8 +68,6 @@ void print_status(t_philo *philo, char *status)
 {
 	pthread_mutex_lock(&philo->shared->print_mutex);
 	if (!philo->shared->stop)
-	{
 		printf("%ld %d %s\n", get_timestamp(philo->shared), philo->id, status);
-	}
 	pthread_mutex_unlock(&philo->shared->print_mutex);
 }
