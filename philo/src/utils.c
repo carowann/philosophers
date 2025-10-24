@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/23 11:11:53 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/24 11:08:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,22 +52,22 @@ long	ft_atol(const char *nptr)
 	return (sign * nbr);
 }
 
-long	get_timestamp(t_data *shared)
+long	get_timestamp(t_sim_data *sim_data)
 {
 	struct timeval	tv;
 	long			timestamp;
 
 	gettimeofday(&tv, NULL);
 	//TODO:protect
-	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - shared->start_time);
+	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - sim_data->start_time);
 	return (timestamp);
 }
 
 // Funzione helper per i print thread-safe
 void print_status(t_philo *philo, char *status)
 {
-	pthread_mutex_lock(&philo->shared->print_mutex);
-	if (!philo->shared->stop)
-		printf("%ld %d %s\n", get_timestamp(philo->shared), philo->id, status);
-	pthread_mutex_unlock(&philo->shared->print_mutex);
+	pthread_mutex_lock(&philo->sim_data->print_mutex);
+	if (!philo->sim_data->simulation_running)
+		printf("%ld %d %s\n", get_timestamp(philo->sim_data), philo->id, status);
+	pthread_mutex_unlock(&philo->sim_data->print_mutex);
 }

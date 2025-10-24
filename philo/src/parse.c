@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:13:14 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/23 11:11:43 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/24 11:07:41 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	validate_format(char *arg)
 	return ;
 }
 
-void	validate_args(int argc, char *argv[], t_data *data)
+void	validate_args(int argc, char *argv[], t_sim_data *sim_data)
 {
 	long	values[5];
 	int		i;
@@ -45,13 +45,13 @@ void	validate_args(int argc, char *argv[], t_data *data)
 			exit(EXIT_FAILURE);
 		i++;
 	}
-	data->n_philos = (int)values[0];
-	data->time_to_die = (int)values[1];
-	data->time_to_eat = (int)values[2];
-	data->time_to_sleep = (int)values[3];
+	sim_data->n_philos = (int)values[0];
+	sim_data->time_to_die = (int)values[1];
+	sim_data->time_to_eat = (int)values[2];
+	sim_data->time_to_sleep = (int)values[3];
 	if (argc == 6)
-		data->n_times_philos_eat = (int)values[4];
+		sim_data->required_meals = (int)values[4];
 	else
-		data->n_times_philos_eat = -1;
+		sim_data->required_meals = -1;
 	return ;
 }

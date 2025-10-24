@@ -6,12 +6,16 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/23 12:00:56 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/24 11:12:04 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PHILO_H
+#ifndef PHILO_H
 # define PHILO_H
+
+/* ========================================================================== */
+/*                                 INCLUDES                                   */
+/* ========================================================================== */
 
 # include <pthread.h>
 # include <stdio.h>
@@ -21,53 +25,76 @@
 # include <unistd.h>
 # include <string.h>
 
+/* ========================================================================== */
+/*                                 DEFINES                                    */
+/* ========================================================================== */
+
 enum code
 {
 	SUCCESS,
 	FAILURE
 };
 
+/* ========================================================================== */
+/*                              STRUCTURES                                    */
+/* ========================================================================== */
+
 typedef struct s_philo
 {
-	int				id;
-	int				meals;
-	pthread_t		thread;
-	pthread_mutex_t	meal_mutex;
-	long			time_last_meal;
-	struct s_data	*shared;
+	int					id;
+	int					meals_eaten;
+	long				last_meal_time;
+	pthread_t			thread;
+	pthread_mutex_t		meal_mutex;
+	struct s_sim_data	*sim_data;
 }				t_philo;
 
-typedef struct s_data
+typedef struct s_sim_data
 {
 	int				n_philos;
-	int				threads_created;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				n_times_philos_eat;
-	int				stop;
+	int				required_meals;		// -1 if unlimited
+	int				simulation_running;	// 0 = stop, 1 = running
+	int				threads_created;
 	long			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	t_philo			*philos;
-}				t_data;
+}				t_sim_data;
 
-void	init_data(t_data *data);
+/* ========================================================================== */
+/*                         FUNCTION PROTOTYPES                               */
+/* ========================================================================== */
+
+/* === INITIALIZATION === */
+void	init_simulation_data(t_sim_data *data);
+void	init_forks(t_sim_data *data);
+
+/* === INPUT VALIDATION === */
 void	check_usage(int argc);
-void	cleanup_and_exit(t_data *data, pthread_t *monitor,int exit_code);
-void	validate_args(int argc, char *argv[], t_data *data);
+void	validate_args(int argc, char *argv[], t_sim_data *data);
+
+/* === SIMULATION CONTROL === */
+void	simulation(t_sim_data *data, pthread_t *monitor);
+void	*routine(void *arg);
+void	*monitor_routine(void *arg);
+
+/* === PHILOSOPHER ACTIONS === */
+void	eat(t_philo *philo);
+void	nap(t_philo *philo);
+
+/* === CLEANUP === */
+void	cleanup_and_exit(t_sim_data *data, pthread_t *monitor, int exit_code);
+void	wait_philos(t_sim_data *data);
+void	destroy_forks(t_sim_data *shared);
+void	destroy_all_mutexes(t_sim_data *data);
+
+/* === UTILITY FUNCTIONS === */
 int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
-long	get_timestamp(t_data *shared);
+long	get_timestamp(t_sim_data *shared);
 void	print_status(t_philo *philo, char *status);
-void	*routine(void *arg);
-void	init_forks(t_data *data);
-void	simulation(t_data *data, pthread_t *monitor);
-void	wait_philos(t_data *data);
-void	destroy_forks(t_data *shared);
-void	*monitor_routine(void*arg);
-void	eat(t_philo	*philo);
-void	nap(t_philo *philo);
-void	destroy_all_mutexes(t_data *data);
 
 #endif
