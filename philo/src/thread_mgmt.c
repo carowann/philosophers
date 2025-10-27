@@ -6,22 +6,11 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:15:40 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/24 11:37:14 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-// int init_mutexes(t_data *data)
-// {
-// 	if (pthread_mutex_init(&data->print_mutex, NULL) != SUCCESS)
-// 		return (0);
-// 	if (pthread_mutex_init(&data->philos->meal_mutex, NULL) != SUCCESS)
-// 		return (0);
-// 	if (init_forks(data) != SUCCESS)
-// 		return (0);
-// 	return (1);
-// }
 
 void	init_forks(t_sim_data *sim_data)
 {
@@ -118,8 +107,8 @@ void	wait_philos(t_sim_data *sim_data)
 void	*monitor_routine(void *arg)
 {
 	t_sim_data	*sim_data;
-	int		i;
-	long	time_starving;
+	int			i;
+	long		time_starving;
 
 	sim_data = (t_sim_data *)arg;
 	while (!sim_data->simulation_running)
@@ -127,7 +116,9 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < sim_data->n_philos)
 		{
+			pthread_mutex_lock(&sim_data->philos[i].meal_mutex);
 			time_starving = get_timestamp(sim_data) - sim_data->philos[i].last_meal_time;
+			pthread_mutex_unlock(&sim_data->philos[i].meal_mutex);
 			if (time_starving >= sim_data->time_to_die)
 			{
 				print_status(&sim_data->philos[i], "died");

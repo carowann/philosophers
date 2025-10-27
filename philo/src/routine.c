@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:14:12 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/24 11:37:57 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ void eat(t_philo *philo)
 
 void	nap(t_philo *philo)
 {
-	printf("%ld %d is sleeping\n", get_timestamp(philo->sim_data), philo->id);
+	print_status(philo, "is sleeping");
 	usleep(philo->sim_data->time_to_sleep * 1000);
 }
