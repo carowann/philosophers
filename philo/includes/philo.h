@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:12:04 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/28 14:03:26 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,17 @@ typedef struct s_philo
 typedef struct s_sim_data
 {
 	int				n_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
 	int				required_meals;		// -1 if unlimited
 	int				simulation_running;	// 0 = stop, 1 = running
 	int				threads_created;
 	long			start_time;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	sim_mutex;
+	pthread_mutex_t	time_mutex;
 	t_philo			*philos;
 }				t_sim_data;
 
@@ -84,6 +86,10 @@ void	*monitor_routine(void *arg);
 /* === PHILOSOPHER ACTIONS === */
 void	eat(t_philo *philo);
 void	nap(t_philo *philo);
+
+/* === THREAD SAFETY === */
+int	is_simulation_stopped(t_sim_data *sim_data);
+int	has_eaten_enough(t_philo *philo);
 
 /* === CLEANUP === */
 void	cleanup_and_exit(t_sim_data *data, pthread_t *monitor, int exit_code);

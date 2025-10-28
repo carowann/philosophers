@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:05 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:05:39 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/28 11:21:34 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char *argv[])
 {
-	t_sim_data		simulation_data;
+	t_sim_data	simulation_data;
 	pthread_t	monitor;
 
 	check_usage(argc);

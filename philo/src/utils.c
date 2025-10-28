@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:08:53 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:09:37 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,27 @@ long	ft_atol(const char *nptr)
 long	get_timestamp(t_sim_data *sim_data)
 {
 	struct timeval	tv;
-	long			timestamp;
+	long			current_time;
+	long			result;
 
+	pthread_mutex_lock(&sim_data->time_mutex);
+	//TODO: proteggere gettimeofday
 	gettimeofday(&tv, NULL);
-	//TODO:protect
-	timestamp = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000) - sim_data->start_time);
-	return (timestamp);
+	current_time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+	result = current_time - sim_data->start_time;
+	if (result < 0)
+		result = 0;
+	pthread_mutex_unlock(&sim_data->time_mutex);
+	return (result);
+}
+
+long	get_current_time_ms(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL) != 0)
+		return (-1);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 // Funzione helper per i print thread-safe

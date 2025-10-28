@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:37:14 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/28 14:15:50 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	init_forks(t_sim_data *sim_data)
 {
 	int	i;
-	sim_data->forks = malloc(sizeof(pthread_mutex_t) * sim_data->n_philos);
-	if (!sim_data->forks)
+	sim_data->fork_mutex = malloc(sizeof(pthread_mutex_t) * sim_data->n_philos);
+	if (!sim_data->fork_mutex)
 		exit(EXIT_FAILURE);
 	i = 0;
 	while (i < sim_data->n_philos)
 	{
-		if (pthread_mutex_init(&sim_data->forks[i], NULL) != SUCCESS)
+		if (pthread_mutex_init(&sim_data->fork_mutex[i], NULL) != SUCCESS)
 			cleanup_and_exit(sim_data, NULL, EXIT_FAILURE);
 		i++;
 	}
@@ -46,6 +46,10 @@ void	init_simulation_data(t_sim_data *sim_data)
 	//TODO: init all mutexes
 	if (pthread_mutex_init(&sim_data->print_mutex, NULL) != SUCCESS)
 		cleanup_and_exit(sim_data, NULL, EXIT_FAILURE);
+	if (pthread_mutex_init(&sim_data->sim_mutex, NULL) != SUCCESS)
+		cleanup_and_exit(sim_data, NULL, EXIT_FAILURE);
+	if (pthread_mutex_init(&sim_data->time_mutex, NULL) != SUCCESS)
+		cleanup_and_exit(sim_data, NULL, EXIT_FAILURE);
 	sim_data->start_time = get_timestamp(sim_data);
 	sim_data->simulation_running = 0;
 	sim_data->threads_created = 0;
@@ -54,10 +58,8 @@ void	init_simulation_data(t_sim_data *sim_data)
 void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo)
 {
 	init_philo(philo, 0, sim_data);
-	pthread_mutex_lock(&philo->sim_data->forks[0]);
 	print_status(philo, "has taken a fork");
 	usleep(philo->sim_data->time_to_die * 1000);
-	pthread_mutex_unlock(&philo->sim_data->forks[0]);
 	print_status(philo, "has died");
 	cleanup_and_exit(sim_data, NULL, EXIT_SUCCESS);
 }
@@ -93,17 +95,6 @@ void	wait_philos(t_sim_data *sim_data)
 	}
 }
 
-// int	destroy_mutexes(t_sim_data *sim_data)
-// {
-// 	if (pthread_mutex_destroy(&sim_data->print_mutex))
-// 		return (0);
-// 	if (pthread_mutex_destroy(&sim_data->philos->meal_mutex))
-// 		return (0);
-// 	if (destroy_forks(sim_data) != SUCCESS)
-// 		return (0);
-// 	return (1);
-// }
-
 void	*monitor_routine(void *arg)
 {
 	t_sim_data	*sim_data;
@@ -111,7 +102,7 @@ void	*monitor_routine(void *arg)
 	long		time_starving;
 
 	sim_data = (t_sim_data *)arg;
-	while (!sim_data->simulation_running)
+	while (!is_simulation_stopped(sim_data))
 	{
 		i = 0;
 		while (i < sim_data->n_philos)
@@ -119,15 +110,17 @@ void	*monitor_routine(void *arg)
 			pthread_mutex_lock(&sim_data->philos[i].meal_mutex);
 			time_starving = get_timestamp(sim_data) - sim_data->philos[i].last_meal_time;
 			pthread_mutex_unlock(&sim_data->philos[i].meal_mutex);
-			if (time_starving >= sim_data->time_to_die)
+			if (time_starving > sim_data->time_to_die)
 			{
 				print_status(&sim_data->philos[i], "died");
+				pthread_mutex_lock(&sim_data->sim_mutex);
 				sim_data->simulation_running = 1;
+				pthread_mutex_unlock(&sim_data->sim_mutex);
 				return (NULL);
 			}
 			i++;
 		}
-		usleep(1000);
+		usleep(1);
 	}
 	return (NULL);
 }
