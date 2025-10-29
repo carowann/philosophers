@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/28 13:09:37 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:17:20 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,23 @@ void print_status(t_philo *philo, char *status)
 	if (!philo->sim_data->simulation_running)
 		printf("%ld %d %s\n", get_timestamp(philo->sim_data), philo->id, status);
 	pthread_mutex_unlock(&philo->sim_data->print_mutex);
+}
+
+void	safe_usleep(t_sim_data *sim_data, int microseconds)
+{
+	long	start_time;
+	long	current_time;
+	long	elapsed;
+
+	start_time = get_current_time_ms() * 1000; // converti in microsecondi
+	while (1)
+	{
+		if (is_simulation_stopped(sim_data))
+			return (1); // Simulazione interrotta
+		current_time = get_current_time_ms() * 1000;
+		elapsed = current_time - start_time;
+		if (elapsed >= microseconds)
+			return (0); // Sleep completato normalmente
+		usleep(500);
+	}
 }

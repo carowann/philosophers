@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/28 14:15:50 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:53:05 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo)
 {
 	init_philo(philo, 0, sim_data);
 	print_status(philo, "has taken a fork");
-	usleep(philo->sim_data->time_to_die * 1000);
+	safe_usleep(philo->sim_data, philo->sim_data->time_to_die * 1000);
 	print_status(philo, "has died");
 	cleanup_and_exit(sim_data, NULL, EXIT_SUCCESS);
 }
@@ -120,7 +120,7 @@ void	*monitor_routine(void *arg)
 			}
 			i++;
 		}
-		usleep(1);
+		safe_usleep(sim_data, 1);
 	}
 	return (NULL);
 }

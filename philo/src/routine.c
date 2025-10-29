@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/28 14:03:32 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:20:23 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(500);
+		safe_usleep(philo->sim_data, 500);
 	while (!is_simulation_stopped(philo->sim_data))
 	{
 		if (philo->sim_data->required_meals != -1 && has_eaten_enough(philo))
@@ -56,7 +56,7 @@ void eat(t_philo *philo)
 	philo->last_meal_time = timestamp;
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
-	usleep(philo->sim_data->time_to_eat * 1000);
+	safe_usleep(philo->sim_data, philo->sim_data->time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->sim_data->fork_mutex[left]);
 	pthread_mutex_unlock(&philo->sim_data->fork_mutex[right]);
 }
@@ -64,5 +64,5 @@ void eat(t_philo *philo)
 void	nap(t_philo *philo)
 {
 	print_status(philo, "is sleeping");
-	usleep(philo->sim_data->time_to_sleep * 1000);
+	safe_usleep(philo->sim_data, philo->sim_data->time_to_sleep * 1000);
 }
