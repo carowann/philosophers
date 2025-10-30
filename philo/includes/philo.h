@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/29 17:19:20 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:04:39 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,6 @@ int		ft_isdigit(int c);
 long	ft_atol(const char *nptr);
 long	get_timestamp(t_sim_data *shared);
 void	print_status(t_philo *philo, char *status);
-void	safe_usleep(t_sim_data *sim_data, int microseconds);
+int		safe_usleep(t_sim_data *sim_data, int microseconds);
 
 #endif

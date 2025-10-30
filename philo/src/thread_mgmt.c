@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/29 17:53:05 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:47:50 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo)
 	init_philo(philo, 0, sim_data);
 	print_status(philo, "has taken a fork");
 	safe_usleep(philo->sim_data, philo->sim_data->time_to_die * 1000);
-	print_status(philo, "has died");
+	print_status(philo, "died");
 	cleanup_and_exit(sim_data, NULL, EXIT_SUCCESS);
 }
 
@@ -95,32 +95,3 @@ void	wait_philos(t_sim_data *sim_data)
 	}
 }
 
-void	*monitor_routine(void *arg)
-{
-	t_sim_data	*sim_data;
-	int			i;
-	long		time_starving;
-
-	sim_data = (t_sim_data *)arg;
-	while (!is_simulation_stopped(sim_data))
-	{
-		i = 0;
-		while (i < sim_data->n_philos)
-		{
-			pthread_mutex_lock(&sim_data->philos[i].meal_mutex);
-			time_starving = get_timestamp(sim_data) - sim_data->philos[i].last_meal_time;
-			pthread_mutex_unlock(&sim_data->philos[i].meal_mutex);
-			if (time_starving > sim_data->time_to_die)
-			{
-				print_status(&sim_data->philos[i], "died");
-				pthread_mutex_lock(&sim_data->sim_mutex);
-				sim_data->simulation_running = 1;
-				pthread_mutex_unlock(&sim_data->sim_mutex);
-				return (NULL);
-			}
-			i++;
-		}
-		safe_usleep(sim_data, 1);
-	}
-	return (NULL);
-}

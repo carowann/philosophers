@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/29 17:17:20 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:03:22 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void print_status(t_philo *philo, char *status)
 	pthread_mutex_unlock(&philo->sim_data->print_mutex);
 }
 
-void	safe_usleep(t_sim_data *sim_data, int microseconds)
+int	safe_usleep(t_sim_data *sim_data, int microseconds)
 {
 	long	start_time;
 	long	current_time;
