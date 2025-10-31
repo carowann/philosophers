@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:31:26 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:02:15 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:28:48 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	cleanup_and_exit(t_sim_data *sim_data, int exit_code)
 {
-	wait_philos(sim_data);
-	if (sim_data->monitor_thread)
-		pthread_join(sim_data->monitor_thread, NULL);
-	destroy_all_mutexes(sim_data);
-	free(sim_data->fork_mutex);
-	free(sim_data->philos);
+	if (sim_data)
+	{
+		wait_philos(sim_data);
+		if (sim_data->monitor_thread)
+			pthread_join(sim_data->monitor_thread, NULL);
+		destroy_all_mutexes(sim_data);
+		free(sim_data->fork_mutex);
+		free(sim_data->philos);
+	}
 	exit(exit_code);
 }
 

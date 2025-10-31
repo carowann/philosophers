@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:18:53 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:40:32 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_simulation_data(t_sim_data *sim_data)
 	sim_data->start_time = get_current_time_ms(sim_data);
 	sim_data->simulation_running = 0;
 	sim_data->threads_created = 0;
+	sim_data->monitor_thread = 0;
 }
 
 void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo)
@@ -70,7 +71,10 @@ void	simulation(t_sim_data *sim_data)
 
 	i = 0;
 	if (sim_data->n_philos == 1)
+	{
+		init_philo(&sim_data->philos[0], 0, sim_data);
 		lonely_philo_simulation(sim_data, &sim_data->philos[0]);
+	}
 	while (i < sim_data->n_philos)
 	{
 		init_philo(&sim_data->philos[i], i, sim_data);

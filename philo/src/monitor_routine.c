@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:47:33 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 14:56:00 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:37:41 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	someone_died(t_sim_data *sim_data)
 		{
 			print_status(&sim_data->philos[i], DEATH);
 			pthread_mutex_lock(&sim_data->sim_mutex);
-			sim_data->simulation_running = 0;
+			sim_data->simulation_running = 1;
 			pthread_mutex_unlock(&sim_data->sim_mutex);
 			return (1);
 		}
@@ -58,7 +58,7 @@ int	all_have_eaten_enough(t_sim_data *sim_data)
 	if (full_philos == sim_data->n_philos)
 	{
 		pthread_mutex_lock(&sim_data->sim_mutex);
-		sim_data->simulation_running = 0;
+		sim_data->simulation_running = 1;
 		pthread_mutex_unlock(&sim_data->sim_mutex);
 		return (1);
 	}

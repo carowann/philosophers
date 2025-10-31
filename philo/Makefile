@@ -6,7 +6,7 @@
 #    By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 14:33:31 by cwannhed          #+#    #+#              #
-#    Updated: 2025/10/31 14:32:11 by cwannhed         ###   ########.fr        #
+#    Updated: 2025/10/31 15:31:56 by cwannhed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,6 @@ all: $(NAME)
 $(NAME): $(SRC)
 	@cc $(SRC) $(INCLUDES) $(FLAGS) -o $(NAME)
 	@echo "$(GREEN)[$(NAME)]:\t compilation completed$(RESET)"
-
 
 clean:
 	@echo "$(RED)[$(NAME)]:\t clean$(RESET)"
