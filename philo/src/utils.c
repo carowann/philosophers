@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/30 11:03:22 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:07:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ void	check_usage(int argc)
 {
 	if (argc != 5 && argc != 6)
 	{
-		write(2, "Usage: ./philo number_of_philosophers time_to_die", 50);
-		write(2, " time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n", 72);
+		write(2, BOLD"Usage: ./philo"RESET, 25);
+		write(2, BLUE" number_of_philosophers "RESET, 35);
+		write(2, RED"time_to_die "RESET, 22);
+		write(2, CYAN"time_to_eat "RESET, 23);
+		write(2, GREEN"time_to_sleep "RESET, 26);
+		write(2, "[number_of_times_each_philosopher_must_eat]\n", 45);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -59,8 +63,11 @@ long	get_timestamp(t_sim_data *sim_data)
 	long			result;
 
 	pthread_mutex_lock(&sim_data->time_mutex);
-	//TODO: proteggere gettimeofday
-	gettimeofday(&tv, NULL);
+	if (gettimeofday(&tv, NULL) != SUCCESS)
+	{
+		pthread_mutex_unlock(&sim_data->time_mutex);
+		cleanup_and_exit(sim_data, EXIT_FAILURE);
+	}
 	current_time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	result = current_time - sim_data->start_time;
 	if (result < 0)
@@ -69,39 +76,11 @@ long	get_timestamp(t_sim_data *sim_data)
 	return (result);
 }
 
-long	get_current_time_ms(void)
+long	get_current_time_ms(t_sim_data	*sim_data)
 {
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL) != 0)
-		return (-1);
+	if (gettimeofday(&tv, NULL) != SUCCESS)
+		cleanup_and_exit(sim_data, EXIT_FAILURE);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-// Funzione helper per i print thread-safe
-void print_status(t_philo *philo, char *status)
-{
-	pthread_mutex_lock(&philo->sim_data->print_mutex);
-	if (!philo->sim_data->simulation_running)
-		printf("%ld %d %s\n", get_timestamp(philo->sim_data), philo->id, status);
-	pthread_mutex_unlock(&philo->sim_data->print_mutex);
-}
-
-int	safe_usleep(t_sim_data *sim_data, int microseconds)
-{
-	long	start_time;
-	long	current_time;
-	long	elapsed;
-
-	start_time = get_current_time_ms() * 1000; // converti in microsecondi
-	while (1)
-	{
-		if (is_simulation_stopped(sim_data))
-			return (1); // Simulazione interrotta
-		current_time = get_current_time_ms() * 1000;
-		elapsed = current_time - start_time;
-		if (elapsed >= microseconds)
-			return (0); // Sleep completato normalmente
-		usleep(500);
-	}
 }

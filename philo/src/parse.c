@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:13:14 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/24 11:07:41 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:54:38 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	validate_args(int argc, char *argv[], t_sim_data *sim_data)
 	int		i;
 
 	i = 1;
-
 	while (i < argc)
 	{
 		validate_format(argv[i]);

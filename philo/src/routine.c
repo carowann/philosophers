@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/29 17:20:23 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 12:54:48 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*routine(void *arg)
 	{
 		if (philo->sim_data->required_meals != -1 && has_eaten_enough(philo))
 			break ;
-		print_status(philo, "is thinking");
+		print_status(philo, THINK);
 		eat(philo);
 		nap(philo);
 	}
@@ -33,12 +33,12 @@ void	*routine(void *arg)
 void	takes_forks(t_philo *philo, int left, int right)
 {
 	pthread_mutex_lock(&philo->sim_data->fork_mutex[right]);
-	print_status(philo, "has taken a fork");
+	print_status(philo, FORK);
 	pthread_mutex_lock(&philo->sim_data->fork_mutex[left]);
-	print_status(philo, "has taken a fork");
+	print_status(philo, FORK);
 }
 
-void eat(t_philo *philo)
+void	eat(t_philo *philo)
 {
 	int		left;
 	int		right;
@@ -51,7 +51,7 @@ void eat(t_philo *philo)
 	else
 		takes_forks(philo, right, left);
 	timestamp = get_timestamp(philo->sim_data);
-	print_status(philo, "is eating");
+	print_status(philo, EAT);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = timestamp;
 	philo->meals_eaten++;
@@ -63,6 +63,6 @@ void eat(t_philo *philo)
 
 void	nap(t_philo *philo)
 {
-	print_status(philo, "is sleeping");
+	print_status(philo, SLEEP);
 	safe_usleep(philo->sim_data, philo->sim_data->time_to_sleep * 1000);
 }
