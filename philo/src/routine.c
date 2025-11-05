@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/05 14:07:16 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:20:18 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	*routine(void *arg)
 	}
 	return (NULL);
 }
+
 static void	switch_forks(int *first, int *second)
 {
 	int	temp;
@@ -47,8 +48,6 @@ void	takes_forks(t_philo *philo)
 	philo->second_fork = philo->id % philo->sim_data->n_philos;
 	if (philo->first_fork > philo->second_fork)
 		switch_forks(&philo->first_fork, &philo->second_fork);
-	// if (philo->id == philo->sim_data->n_philos && philo->sim_data->n_philos % 2 == 1)
-	// 	switch_forks(&philo->first_fork, &philo->second_fork);
 	if (philo->sim_data->n_philos % 2 == 1)
 		pthread_mutex_lock(&philo->sim_data->waiter_mutex);
 	pthread_mutex_lock(&philo->sim_data->fork_mutex[philo->first_fork]);
@@ -73,7 +72,7 @@ void	eat(t_philo *philo)
 	{
 		pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->second_fork]);
 		pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->first_fork]);
-		return;
+		return ;
 	}
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = get_timestamp(philo->sim_data);
