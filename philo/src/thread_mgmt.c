@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:40:32 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:05:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ void	init_forks(t_sim_data *sim_data)
 void	init_philo(t_philo *philo, int i, t_sim_data *sim_data)
 {
 	philo->id = i + 1;
-	philo->last_meal_time = sim_data->start_time;
+	philo->last_meal_time = 0;
 	philo->sim_data = sim_data;
 	philo->meals_eaten = 0;
+	philo->first_fork = 0;
+	philo->second_fork = 0;
 	if (pthread_mutex_init(&philo->meal_mutex, NULL) != SUCCESS)
 		cleanup_and_exit(sim_data, EXIT_FAILURE);
 }
@@ -49,6 +51,8 @@ void	init_simulation_data(t_sim_data *sim_data)
 	if (pthread_mutex_init(&sim_data->sim_mutex, NULL) != SUCCESS)
 		cleanup_and_exit(sim_data, EXIT_FAILURE);
 	if (pthread_mutex_init(&sim_data->time_mutex, NULL) != SUCCESS)
+		cleanup_and_exit(sim_data, EXIT_FAILURE);
+	if (pthread_mutex_init(&sim_data->waiter_mutex, NULL) != SUCCESS)
 		cleanup_and_exit(sim_data, EXIT_FAILURE);
 	sim_data->start_time = get_current_time_ms(sim_data);
 	sim_data->simulation_running = 0;
@@ -86,6 +90,7 @@ void	simulation(t_sim_data *sim_data)
 		sim_data->threads_created++;
 		i++;
 	}
+	usleep(1000);
 	if (pthread_create(&sim_data->monitor_thread,
 			NULL,
 			monitor_routine,

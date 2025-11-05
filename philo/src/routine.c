@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 12:54:48 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:07:16 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,60 @@ void	*routine(void *arg)
 	}
 	return (NULL);
 }
-
-void	takes_forks(t_philo *philo, int left, int right)
+static void	switch_forks(int *first, int *second)
 {
-	pthread_mutex_lock(&philo->sim_data->fork_mutex[right]);
+	int	temp;
+
+	temp = *first;
+	*first = *second;
+	*second = temp;
+}
+
+void	takes_forks(t_philo *philo)
+{
+	int	temp;
+
+	temp = 0;
+	philo->first_fork = (philo->id - 1) % philo->sim_data->n_philos;
+	philo->second_fork = philo->id % philo->sim_data->n_philos;
+	if (philo->first_fork > philo->second_fork)
+		switch_forks(&philo->first_fork, &philo->second_fork);
+	// if (philo->id == philo->sim_data->n_philos && philo->sim_data->n_philos % 2 == 1)
+	// 	switch_forks(&philo->first_fork, &philo->second_fork);
+	if (philo->sim_data->n_philos % 2 == 1)
+		pthread_mutex_lock(&philo->sim_data->waiter_mutex);
+	pthread_mutex_lock(&philo->sim_data->fork_mutex[philo->first_fork]);
 	print_status(philo, FORK);
-	pthread_mutex_lock(&philo->sim_data->fork_mutex[left]);
+	if (is_simulation_stopped(philo->sim_data))
+	{
+		pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->first_fork]);
+		if (philo->sim_data->n_philos % 2 == 1)
+			pthread_mutex_unlock(&philo->sim_data->waiter_mutex);
+		return ;
+	}
+	pthread_mutex_lock(&philo->sim_data->fork_mutex[philo->second_fork]);
 	print_status(philo, FORK);
+	if (philo->sim_data->n_philos % 2 == 1)
+		pthread_mutex_unlock(&philo->sim_data->waiter_mutex);
 }
 
 void	eat(t_philo *philo)
 {
-	int		left;
-	int		right;
-	long	timestamp;
-
-	left = philo->id - 1;
-	right = philo->id % philo->sim_data->n_philos;
-	if (philo->id % 2 != 0)
-		takes_forks(philo, left, right);
-	else
-		takes_forks(philo, right, left);
-	timestamp = get_timestamp(philo->sim_data);
-	print_status(philo, EAT);
+	takes_forks(philo);
+	if (is_simulation_stopped(philo->sim_data))
+	{
+		pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->second_fork]);
+		pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->first_fork]);
+		return;
+	}
 	pthread_mutex_lock(&philo->meal_mutex);
-	philo->last_meal_time = timestamp;
+	philo->last_meal_time = get_timestamp(philo->sim_data);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
+	print_status(philo, EAT);
 	safe_usleep(philo->sim_data, philo->sim_data->time_to_eat * 1000);
-	pthread_mutex_unlock(&philo->sim_data->fork_mutex[left]);
-	pthread_mutex_unlock(&philo->sim_data->fork_mutex[right]);
+	pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->second_fork]);
+	pthread_mutex_unlock(&philo->sim_data->fork_mutex[philo->first_fork]);
 }
 
 void	nap(t_philo *philo)

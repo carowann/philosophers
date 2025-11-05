@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:47:33 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/04 13:16:42 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 12:34:15 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	*monitor_routine(void *arg)
 {
 	t_sim_data	*sim_data;
 
+	usleep(1000);
 	sim_data = (t_sim_data *)arg;
 	while (!is_simulation_stopped(sim_data))
 	{
