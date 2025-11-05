@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:31:26 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:28:48 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:05:17 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	destroy_all_mutexes(t_sim_data *sim_data)
 	destroy_forks(sim_data);
 	pthread_mutex_destroy(&sim_data->print_mutex);
 	pthread_mutex_destroy(&sim_data->time_mutex);
+	pthread_mutex_destroy(&sim_data->sim_mutex);
+	pthread_mutex_destroy(&sim_data->waiter_mutex);
 	while (i < sim_data->n_philos)
 	{
 		pthread_mutex_destroy(&sim_data->philos[i].meal_mutex);

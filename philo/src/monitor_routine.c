@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:47:33 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/02 15:27:47 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/05 14:09:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	all_have_eaten_enough(t_sim_data *sim_data)
 
 	i = 0;
 	full_philos = 0;
+	if (sim_data->required_meals == -1)
+		return (0);
 	while (i < sim_data->n_philos)
 	{
 		pthread_mutex_lock(&sim_data->philos[i].meal_mutex);
@@ -69,12 +71,13 @@ void	*monitor_routine(void *arg)
 {
 	t_sim_data	*sim_data;
 
+	usleep(1000);
 	sim_data = (t_sim_data *)arg;
 	while (!is_simulation_stopped(sim_data))
 	{
-		if (someone_died(sim_data))
-			return (NULL);
 		if (all_have_eaten_enough(sim_data))
+			return (NULL);
+		if (someone_died(sim_data))
 			return (NULL);
 		safe_usleep(sim_data, 1);
 	}
