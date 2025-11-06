@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:39:53 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/02 15:03:41 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:07:53 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	check_usage(int argc)
 {
 	if (argc != 5 && argc != 6)
 	{
-		write(2, BOLD"Usage: ./philo"RESET, 23);
+		write(2, BOLD"Usage: ./philo"RESET, 25);
 		write(2, BLUE" number_of_philosophers "RESET, 35);
 		write(2, RED"time_to_die "RESET, 22);
 		write(2, CYAN"time_to_eat "RESET, 23);

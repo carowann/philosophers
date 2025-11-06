@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/05 14:04:43 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:08:02 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ typedef struct s_philo
 	int					id;
 	int					meals_eaten;
 	long				last_meal_time;
-	int					first_fork;
-	int					second_fork;
 	pthread_t			thread;
 	pthread_mutex_t		meal_mutex;
 	struct s_sim_data	*sim_data;
@@ -88,7 +86,6 @@ typedef struct s_sim_data
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	sim_mutex;
 	pthread_mutex_t	time_mutex;
-	pthread_mutex_t	waiter_mutex;
 	pthread_t		monitor_thread;
 	t_philo			*philos;
 }				t_sim_data;

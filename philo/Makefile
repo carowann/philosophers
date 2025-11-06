@@ -6,7 +6,7 @@
 #    By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 14:33:31 by cwannhed          #+#    #+#              #
-#    Updated: 2025/11/05 14:09:49 by cwannhed         ###   ########.fr        #
+#    Updated: 2025/11/03 11:41:17 by cwannhed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC =	src/main.c		\
 	src/thread_safety.c	\
 	src/monitor_routine.c
 
-FLAGS	= -g -pthread -O3
+FLAGS	= -g -pthread
 FLAGS	+= -Wall -Werror -Wextra
 
 all: $(NAME)
