@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/09 12:25:36 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 21:43:46 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	validate_args(int argc, char *argv[], t_sim_data *data);
 void	simulation(t_sim_data *data);
 void	*routine(void *arg);
 void	*monitor_routine(void *arg);
+void	lonely_philo_simulation(t_sim_data *sim_data);
+void	*lonely_philo_routine(void *arg);
 
 /* === PHILOSOPHER ACTIONS === */
 void	eat(t_philo *philo);
