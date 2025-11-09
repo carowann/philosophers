@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 15:52:56 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:08:02 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 12:25:36 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@ enum e_philo_status
 # define FORK_MSG	"has taken a fork"
 # define THINK_MSG	"is thinking"
 # define DEATH_MSG	"died"
+# define VALID_ARGS_MSG	"Please input valid arguments\n"
+
+# define MONITOR_SLEEP_MICROSECONDS	1000
+# define PHILO_SLEEP_MICROSECONDS 500
+# define USLEEP_CHECK_INTERVAL_MICROSECONDS 500
+# define INFINITE_MEALS -1
 
 /* ========================================================================== */
 /*                              STRUCTURES                                    */

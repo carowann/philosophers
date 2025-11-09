@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 12:54:48 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 12:07:43 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		safe_usleep(philo->sim_data, 500);
+		safe_usleep(philo->sim_data, PHILO_SLEEP_MICROSECONDS);
 	while (!is_simulation_stopped(philo->sim_data))
 	{
-		if (philo->sim_data->required_meals != -1 && has_eaten_enough(philo))
+		if (philo->sim_data->required_meals != INFINITE_MEALS && has_eaten_enough(philo))
 			break ;
 		print_status(philo, THINK);
 		eat(philo);

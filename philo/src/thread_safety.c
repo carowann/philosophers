@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 10:32:36 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 16:24:05 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 12:11:28 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	has_eaten_enough(t_philo *philo)
 	int	result;
 
 	result = 0;
-	if (philo->sim_data->required_meals == -1)
+	if (philo->sim_data->required_meals == INFINITE_MEALS)
 		return (result);
 	pthread_mutex_lock(&philo->meal_mutex);
 	result = (philo->meals_eaten >= philo->sim_data->required_meals);
@@ -72,7 +72,7 @@ int	safe_usleep(t_sim_data *sim_data, int microseconds)
 		elapsed = current_time - start_time;
 		if (elapsed >= microseconds)
 			return (0);
-		if (usleep(500) != SUCCESS)
+		if (usleep(USLEEP_CHECK_INTERVAL_MICROSECONDS) != SUCCESS)
 			cleanup_and_exit(sim_data, EXIT_FAILURE);
 	}
 }

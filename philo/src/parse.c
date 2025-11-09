@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 17:13:14 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/10/31 15:26:16 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 12:08:09 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	print_error_and_exit(void)
 {
-	write(2, RED"Please input valid arguments\n"RESET, 40);
+	write(2, RED VALID_ARGS_MSG RESET, sizeof(RED VALID_ARGS_MSG RESET) - 1);
 	exit(EXIT_FAILURE);
 }
 
@@ -57,6 +57,6 @@ void	validate_args(int argc, char *argv[], t_sim_data *sim_data)
 	if (argc == 6)
 		sim_data->required_meals = (int)values[4];
 	else
-		sim_data->required_meals = -1;
+		sim_data->required_meals = INFINITE_MEALS;
 	return ;
 }
