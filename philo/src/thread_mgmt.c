@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/06 12:20:06 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:05:57 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,15 @@ void	init_simulation_data(t_sim_data *sim_data)
 	sim_data->monitor_thread = 0;
 }
 
-void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo)
+void	lonely_philo_simulation(t_sim_data *sim_data, t_philo *philo) //TODO fix create one thread with own routine
 {
 	init_philo(philo, 0, sim_data);
+	if (pthread_create(&sim_data->philos[0].thread,
+				NULL,
+				routine,
+				&sim_data->philos[0]) != 0)
+			cleanup_and_exit(sim_data, EXIT_FAILURE);
+	sim_data->threads_created++;
 	print_status(philo, FORK);
 	safe_usleep(philo->sim_data, (philo->sim_data->time_to_die + 1) * 1000);
 	print_status(philo, DEATH);
@@ -71,10 +77,7 @@ void	simulation(t_sim_data *sim_data)
 
 	i = 0;
 	if (sim_data->n_philos == 1)
-	{
-		init_philo(&sim_data->philos[0], 0, sim_data);
 		lonely_philo_simulation(sim_data, &sim_data->philos[0]);
-	}
 	while (i < sim_data->n_philos)
 	{
 		init_philo(&sim_data->philos[i], i, sim_data);
