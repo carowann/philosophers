@@ -6,17 +6,26 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:47:33 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/09 12:23:18 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:02:50 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+static int	philo_funeral(t_sim_data *sim_data, int philo_index)
+{
+	print_status(&sim_data->philos[philo_index], DEATH);
+	pthread_mutex_lock(&sim_data->sim_mutex);
+	sim_data->simulation_running = 1;
+	pthread_mutex_unlock(&sim_data->sim_mutex);
+	return (1);
+}
+
 static int	someone_died(t_sim_data *sim_data)
 {
 	long	time_starving;
 	long	current_time;
-	int 	meals;
+	int		meals;
 	int		i;
 
 	i = 0;
@@ -27,19 +36,14 @@ static int	someone_died(t_sim_data *sim_data)
 		time_starving = current_time - sim_data->philos[i].last_meal_time;
 		meals = sim_data->philos[i].meals_eaten;
 		pthread_mutex_unlock(&sim_data->philos[i].meal_mutex);
-		if (sim_data->required_meals != INFINITE_MEALS && meals >= sim_data->required_meals)
+		if (sim_data->required_meals != INFINITE_MEALS
+			&& meals >= sim_data->required_meals)
 		{
 			i++;
 			continue ;
 		}
 		if (time_starving > sim_data->time_to_die)
-		{
-			print_status(&sim_data->philos[i], DEATH);
-			pthread_mutex_lock(&sim_data->sim_mutex);
-			sim_data->simulation_running = 1;
-			pthread_mutex_unlock(&sim_data->sim_mutex);
-			return (1);
-		}
+			return (philo_funeral(sim_data, i));
 		i++;
 	}
 	return (0);

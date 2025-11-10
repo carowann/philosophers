@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/09 21:44:05 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:04:51 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,13 @@ void	init_simulation_data(t_sim_data *sim_data)
 
 void	lonely_philo_simulation(t_sim_data *sim_data)
 {
-		init_philo(&sim_data->philos[0], 0, sim_data);
-		if (pthread_create(&sim_data->philos[0].thread,
-				NULL,
-				lonely_philo_routine,
-				&sim_data->philos[0]) != 0)
-			cleanup_and_exit(sim_data, EXIT_FAILURE);
-		sim_data->threads_created++;
-}
-
-void	*lonely_philo_routine(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	print_status(philo, THINK);
-	print_status(philo, FORK);
-	safe_usleep(philo->sim_data, (philo->sim_data->time_to_die + 1) * 1000);
-	print_status(philo, DEATH);
-	return (NULL);
+	init_philo(&sim_data->philos[0], 0, sim_data);
+	if (pthread_create(&sim_data->philos[0].thread,
+			NULL,
+			lonely_philo_routine,
+			&sim_data->philos[0]) != 0)
+		cleanup_and_exit(sim_data, EXIT_FAILURE);
+	sim_data->threads_created++;
 }
 
 void	simulation(t_sim_data *sim_data)

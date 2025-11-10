@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 12:00:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/09 12:07:43 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/10 10:15:42 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	*routine(void *arg)
 		safe_usleep(philo->sim_data, PHILO_SLEEP_MICROSECONDS);
 	while (!is_simulation_stopped(philo->sim_data))
 	{
-		if (philo->sim_data->required_meals != INFINITE_MEALS && has_eaten_enough(philo))
+		if (philo->sim_data->required_meals != INFINITE_MEALS
+			&& has_eaten_enough(philo))
 			break ;
 		print_status(philo, THINK);
 		eat(philo);
@@ -65,4 +66,16 @@ void	nap(t_philo *philo)
 {
 	print_status(philo, SLEEP);
 	safe_usleep(philo->sim_data, philo->sim_data->time_to_sleep * 1000);
+}
+
+void	*lonely_philo_routine(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	print_status(philo, THINK);
+	print_status(philo, FORK);
+	safe_usleep(philo->sim_data, (philo->sim_data->time_to_die + 1) * 1000);
+	print_status(philo, DEATH);
+	return (NULL);
 }
