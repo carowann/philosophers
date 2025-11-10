@@ -6,7 +6,7 @@
 /*   By: cwannhed <cwannhed@student.42firenze.it>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:01:28 by cwannhed          #+#    #+#             */
-/*   Updated: 2025/11/10 10:04:51 by cwannhed         ###   ########.fr       */
+/*   Updated: 2025/11/10 11:04:09 by cwannhed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	init_forks(t_sim_data *sim_data)
 void	init_philo(t_philo *philo, int i, t_sim_data *sim_data)
 {
 	philo->id = i + 1;
-	philo->last_meal_time = sim_data->start_time;
+	philo->last_meal_time = 0;
 	philo->sim_data = sim_data;
 	philo->meals_eaten = 0;
 	if (pthread_mutex_init(&philo->meal_mutex, NULL) != SUCCESS)
